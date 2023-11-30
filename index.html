@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>在线 Python 运行器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 95%;
+            margin: 5px auto;
+            background-color: #fff;
+            padding: 5px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .code-container {
+            display: flex;
+            position: relative;
+            
+        }
+        .btn-container{
+            position: relative;
+           margin-bottom: 50px;
+           right: 52%;
+        }
+        #code {
+            flex: 1;
+            height: 450px;
+            font-size: 16px;
+            resize: vertical;
+            border-radius: 5px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        #output {
+            flex: 1;
+            height: 450px;
+            font-size: 16px;
+            resize: vertical;
+            border-radius: 5px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin-left: 20px;
+        }
+        #run {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #run:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center;">在线 Python 运行器</h1>
+        <div class="btn-container"><button id="run">运行</button>
+        </div>
+        <div class="code-container">
+            <textarea id="code" placeholder="在这里输入你的Python代码"></textarea>
+            <textarea id="output" placeholder="运行结果将会显示在这里" readonly></textarea>
+            
+        </div>
+        <div ><h4 style="text-align: center;">Copyrigh@2023 Python小铃</h4>
+        </div>
+    </div>
+    <script>
+        document.getElementById('run').addEventListener('click', function() {
+            var code = document.getElementById('code').value;
+            runCode(code);
+        });
+
+        function runCode(code) {
+            fetch('/api/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'code=' + encodeURIComponent(code)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('output').value = data.output;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
